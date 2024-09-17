@@ -3,7 +3,7 @@ services:
 
   postgres:
     image: docker.io/library/postgres:16-alpine@sha256:bbd7346fab25b7e0b25f214829d6ebfb78ef0465059492e46dee740ce8fcd844
-    network_mode: host
+    #network_mode: host
     # ports:
     #   - "5432:5432"
     deploy:
@@ -65,8 +65,12 @@ services:
         condition: on-failure
     depends_on:
       - generate-certificates
-  #terrashine:
-  #  image: docker.io/library/rust
-  #  build:
-  #    context: .
-  #    dockerfile: Dockerfile
+  terrashine:
+    image: docker.io/library/rust
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+     - postgres
+    entrypoint: /bin/sh
+    command: -c "sleep 60000; terrashine migrate --database-url postgres://postgres:password@postgres/"
