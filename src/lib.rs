@@ -149,8 +149,9 @@ pub async fn setup_server(
 
     // Set up HTTP pool
     let mut http_builder = Client::builder()
-        .connect_timeout(Duration::from_secs(10))
-        .timeout(Duration::from_secs(60));
+        .connect_timeout(Duration::from_secs(60))
+        .timeout(Duration::from_secs(300));
+
     for cert in certificates.iter() {
         http_builder = http_builder
             .add_root_certificate(Certificate::from_der(cert.as_ref()).expect("Not a certificate"));
